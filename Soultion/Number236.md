@@ -18,7 +18,15 @@
 
 直接根据两个节点，拿到两台从根节点到这两个节点的链表，然后对于这两个链表进行查找第一个不相同结点的前一个节点即可
 
+找不同结点时，必须要注意如果两个链表不一样长，当一个跑完的时候，必须要记录下来最后一个结点
 
+三：
+
+在左子树和右子树中查找有没有p，q结点。
+
+- 左子树没有，判断右子树
+- 右子树没有，判断左子树
+- 如果左右子树都存在，那就是root结点
 
 **C++**
 
@@ -35,10 +43,12 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        switch(rand()%2 + 1)
+        switch(3)
         {
             case 1:
                 return FindAimNode(root, p, q);
+            case 2:
+                return FindAimNode1(root, p, q);
             default:
                 return FindAimNode2(root, p, q);
         }
@@ -69,23 +79,18 @@ public:
         return false;
     }
     
-    //一个一个的向下找进行遍历
+    //一个一个的向下找进行遍历,判断位置
     TreeNode* FindAimNode(TreeNode* root, TreeNode* p, TreeNode* q)
     {
-        if (root == nullptr)
-        {
-            return nullptr;
-        }
-        
-        if (p == root || q == root)
+        if (root == nullptr || p == root || q == root)
         {
             return root;
         }
         
         bool pLeft = IsSide(root->left, p);
         bool pRight = IsSide(root->right, p);
-        bool qLeft = IsSide(root->left, p);
-        bool qRight = IsSide(root->right, p);
+        bool qLeft = IsSide(root->left, q);
+        bool qRight = IsSide(root->right, q);
         
         if ((pLeft && qRight) || (pRight && qLeft))
         {
@@ -118,54 +123,59 @@ public:
             return true;
         }
         
-        bool left = GetList(root->left, aimNode, list);
-        if (left)
-        {
-            return true;
-        }
-        
-        bool right = GetList(root->right, aimNode, list);
-        if (right)
-        {
-            return true;
-        }
-        
+        list.push_back(root);
+        if (GetList(root->left, aimNode, list)) return true;
+        if (GetList(root->right, aimNode, list)) return true;
+
+        list.pop_back();        
         return false;   
     }
     
     //找到两条链表，然后查找公共结点即可
-    TreeNode* FindAimNode2(TreeNode* root, TreeNode* p, TreeNode* q)
+    TreeNode* FindAimNode1(TreeNode* root, TreeNode* p, TreeNode* q)
     {
-        if (root == nullptr)
-        {
-            return nullptr;
-        }
-        
-        if (p == root || q == root)
+        if (root == nullptr || p == root || q == root)
         {
             return root;
         }
         
-        std::vector<TreeNode*> firstList;
-        GetList(root, p, firstList);
-        std::vector<TreeNode*> secondList;
-        GetList(root, q, secondList);
+        std::vector<TreeNode*> firstList, secondList;
+        if (!GetList(root, p, firstList))   return nullptr;
+        if (!GetList(root, q, secondList))  return nullptr;
         
+        int len = firstList.size() < secondList.size() ? firstList.size() : secondList.size();
         //进行遍历查找,第一个不是相同结点的前一个节点即是所求结点
-        TreeNode* prev = firstList[0];
-        for (size_t i = 1; i < firstList.size(); i++)
+        TreeNode* result = root;
+        for (int i = 0; i < len; i++)
         {
             if (firstList[i] != secondList[i])
-            {
-                return prev;
-            }
+                return result;
             
-            prev = firstList[i];
+            result = firstList[i];
         }
         
-        return nullptr;
+        //最后必须返回result，有可能是一个是另外一个的父亲，一个走完另一个还没有完成
+        return result;
     }
     
+    //进行递归查找，判断在左子树中有没有，右子树中有没有，然后进行判断
+    TreeNode* FindAimNode2(TreeNode* root, TreeNode* p, TreeNode* q)
+    {
+        if (root == nullptr || p == root || q == root)
+        {
+            return root;
+        }
+        
+        //在左子树中查找
+        TreeNode* left = FindAimNode2(root->left, p, q);
+        //在右子树中查找
+        TreeNode* right = FindAimNode2(root->right, p, q);
+        
+        if (left == nullptr)    return right;
+        if (right == nullptr)   return left;
+        
+        return root;
+    }
 };
 ```
 

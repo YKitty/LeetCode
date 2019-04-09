@@ -4,7 +4,9 @@
 
 思路：
 
-创建一个辅助链表，采用双指针，prev和cur进行寻找插入位置然后进行插入即可
+一：创建一个数组一个一个的向里面插入数据，然后拿出来就好了
+
+二：创建一个辅助链表，采用双指针，prev和cur进行寻找插入位置然后进行插入即可
 
 
 
@@ -29,7 +31,7 @@ public:
         }
     }
     
-    //正在验证
+    //运行失败
     ListNode* GetList(ListNode* head)
     {
         if (head == nullptr)
@@ -49,12 +51,13 @@ public:
         ListNode* cur = head->next;
         while (cur)
         {
-            size_t i = 0;
+            int i = 0;
             for (i = v.size() - 1; i >= 0; i--)
             {
                 if (cur->val > v[i]->val)
                 {
-                    if (i == v.size() - 1)
+                    //最后一个位置
+                    if (i == (v.size() - 1))
                     {
                         v.insert(v.begin(), cur);
                         break;
@@ -65,8 +68,10 @@ public:
                         v.insert(index, cur);
                         break;    
                     }
-                                    }
+                }
             }
+            
+            //第一个位置
             if (i < 0)
             {
                 v.insert(v.begin(), cur);
@@ -75,7 +80,7 @@ public:
         }
         
         ListNode* newList = nullptr;
-        for (size_t i = v.size() - 1; i >= 0; i--)
+        for (int i = v.size() - 1; i >= 0; i--)
         {
             v[i]->next = newList;
             newList = v[i];            
@@ -84,6 +89,7 @@ public:
         return newList;
     }
    
+    //成功
     ListNode* GetList2(ListNode* head)
     {
         if (head == nullptr)
