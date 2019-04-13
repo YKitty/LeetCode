@@ -12,6 +12,10 @@
 
 给左边增加右边的字符，或者给右边增加左边的字符再次进行判断即可
 
+第三种;
+
+递归解决问题。注意：记录下来删除字符的个数
+
 
 
 **C++**
@@ -20,12 +24,14 @@
 class Solution {
 public:
     bool validPalindrome(string s) {
-        switch(rand()%1 + 2)
+        switch(rand()%1 + 3)
         {
             case 1:
                 return DelCheck(s);
-            default:
+            case 2:
                 return Check1(s);
+            default:
+                return Check2(s);
         }
     }
     
@@ -87,6 +93,41 @@ public:
             
             left++;
             right--;
+        }
+        
+        return true;
+    }
+    
+    //使用递归和左边++，右边++一样的思路
+    bool Check2(std::string s)
+    {
+        //最后一位是已经删除的字符数
+        return _Check2(s, 0, s.size() - 1, 0);
+    }
+    
+    bool _Check2(std::string s, int left, int right, int delNum)
+    {
+        if (left == right)
+        {
+            return true;
+        }
+        
+        while (left < right)
+        {
+            if (s[left] == s[right])
+            {
+                left++;
+                right--;
+            }
+            else
+            {
+                //delNum等于1，也出错，这已经是第二次不相等了
+                if (delNum >= 1)
+                    return false;
+                delNum++;
+                
+                return _Check2(s, left + 1, right, delNum) || _Check2(s, left, right - 1, delNum);
+            }
         }
         
         return true;
