@@ -4,6 +4,7 @@
 
 |                            Number                            |                           Solution                           | Difficulty |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :--------: |
+|      [15. 3Sum](https://leetcode-cn.com/problems/3sum)       | [C++](https://github.com/YKitty/LeetCode/blob/master/Soultion/Number15.md) |   medium   |
 | [79. Word Search](https://leetcode-cn.com/problems/word-search/) | [C++]( https://github.com/YKitty/LeetCode/blob/master/Soultion/Number79.md ) |   medium   |
 | [102. Binary Tree Level Order Traversal](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/) | [C++]( https://github.com/YKitty/LeetCode/blob/master/Soultion/Number102.md ) |   medium   |
 | [118. Pascal's Triangle](https://leetcode-cn.com/problems/pascals-triangle/) | [C++](https://github.com/YKitty/LeetCode/blob/master/Soultion/Number118.md) |    Easy    |
